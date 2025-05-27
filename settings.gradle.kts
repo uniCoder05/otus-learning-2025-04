@@ -12,6 +12,7 @@ include("L04-generics")
 include("L05-collections")
 include("L06-annotations")
 include("hw03-test-framework")
+include("L08-gc:homework")
 
 
 pluginManagement {
