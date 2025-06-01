@@ -13,7 +13,7 @@ include("L05-collections")
 include("L06-annotations")
 include("hw03-test-framework")
 include("L08-gc:homework")
-
+include("L08-gc:demo")
 
 pluginManagement {
     val jgitver: String by settings
