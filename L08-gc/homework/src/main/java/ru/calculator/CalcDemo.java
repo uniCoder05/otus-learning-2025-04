@@ -4,8 +4,8 @@ package ru.calculator;
 -Xms256m
 -Xmx256m
 -XX:+HeapDumpOnOutOfMemoryError
--XX:HeapDumpPath=./logs/heapdump.hprof
 -XX:+UseG1GC
+-XX:HeapDumpPath=./logs/heapdump.hprof
 -Xlog:gc=debug:file=./logs/gc-%p-%t.log:tags,uptime,time,level:filecount=5,filesize=10m
 */
 
@@ -20,9 +20,10 @@ public class CalcDemo {
         long counter = 500_000_000;
         var summator = new Summator();
         long startTime = System.currentTimeMillis();
+        var data = new Data(0);
 
         for (var idx = 0; idx < counter; idx++) {
-            var data = new Data(idx);
+            data.setValue(idx);
             summator.calc(data);
 
             if (idx % 10_000_000 == 0) {
