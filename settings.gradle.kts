@@ -14,6 +14,8 @@ include("L06-annotations")
 include("hw03-test-framework")
 include("L08-gc:homework")
 include("L08-gc:demo")
+include("L09-docker")
+include("L10-byteCodes")
 
 pluginManagement {
     val jgitver: String by settings
