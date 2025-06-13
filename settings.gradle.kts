@@ -16,6 +16,7 @@ include("L08-gc:homework")
 include("L08-gc:demo")
 include("L09-docker")
 include("L10-byteCodes")
+include("hw05-aop")
 
 pluginManagement {
     val jgitver: String by settings
