@@ -6,7 +6,7 @@ public class Demo {
     }
 
     public void action() {
-        TestLoggingInterface testLogging = MyIoc.createMyClass(TestLogging.class);
+        TestLoggingInterface testLogging = MyIoc.createProxy(new TestLogging());
         testLogging.calculation(1);
         testLogging.calculation(1, 2);
         testLogging.calculation(1, 2, "three");
