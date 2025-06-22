@@ -19,6 +19,7 @@ include("L10-byteCodes")
 include("hw05-aop")
 include("L11-Java8")
 include("L12-solid")
+include("L13-creationalPatterns")
 
 pluginManagement {
     val jgitver: String by settings
