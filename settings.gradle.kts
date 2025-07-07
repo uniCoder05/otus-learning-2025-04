@@ -20,6 +20,7 @@ include("hw05-aop")
 include("L11-Java8")
 include("L12-solid")
 include("L13-creationalPatterns")
+include("hw06-atm")
 
 pluginManagement {
     val jgitver: String by settings
