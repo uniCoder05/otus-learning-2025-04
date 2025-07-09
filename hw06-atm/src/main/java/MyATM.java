@@ -27,7 +27,7 @@ public class MyATM implements ATM {
     @Override
     public Map<Integer, Integer> withdraw(int amount) throws Exception {
         if (amount > getBalance()) {
-            throw new NotEnoughMoneyException("Запрашиваемая сумма превышает баланс");
+            throw new NotEnoughMoneyException("Запрашиваемая сумма " + amount + " превышает баланс");
         }
         return dispenser.dispense(amount);
     }

@@ -13,7 +13,7 @@ public record MyDispenser(List<Cassette> cassettes) implements Dispenser {
     @Override
     public Map<Integer, Integer> dispense(int amount) throws Exception {
         if (!canDispense(amount)) {
-            throw new NotEnoughMoneyException();
+            throw new NotEnoughMoneyException(amount);
         }
         Map<Integer, Integer> dispenseNotes = new HashMap<>();
         int remAmount = amount;
@@ -33,7 +33,7 @@ public record MyDispenser(List<Cassette> cassettes) implements Dispenser {
         }
 
         if (remAmount != 0) {
-            throw new NotEnoughMoneyException();
+            throw new NotEnoughMoneyException(amount);
         }
 
         return dispenseNotes;

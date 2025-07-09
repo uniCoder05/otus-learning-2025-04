@@ -8,10 +8,10 @@ public class Demo {
     private static final Logger logger = LoggerFactory.getLogger(Demo.class);
 
     public static void main(String[] args) {
-        int[] denominations = {100, 200, 500, 1000, 2000, 5000};
+        var denominations = Denomination.values();
         List<Cassette> cassettes = new ArrayList<>();
-        for (int denomination : denominations) {
-            cassettes.add(new MyCassette(denomination, getRandom(50, 200)));
+        for (Denomination denomination : denominations) {
+            cassettes.add(new MyCassette(denomination.getVal(), getRandom(50, 200)));
         }
 
         Dispenser dispenser = new MyDispenser(cassettes);

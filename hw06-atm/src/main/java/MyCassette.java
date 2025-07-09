@@ -29,7 +29,7 @@ public class MyCassette implements Cassette {
     @Override
     public List<Integer> withdraw(int amount) throws NotEnoughMoneyException {
         if (amount > count) {
-            throw new NotEnoughMoneyException();
+            throw new NotEnoughMoneyException(amount);
         }
         this.count -= amount;
         List<Integer> result = new ArrayList<>();
