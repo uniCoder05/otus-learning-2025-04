@@ -12,4 +12,10 @@ public class ObjectForMessage {
     public void setData(List<String> data) {
         this.data = data;
     }
+
+    public ObjectForMessage deepCopy() {
+        ObjectForMessage copy = new ObjectForMessage();
+        copy.setData(List.copyOf(data));
+        return copy;
+    }
 }

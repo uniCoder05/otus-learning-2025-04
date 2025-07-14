@@ -6,7 +6,7 @@ public class LazyProxy implements HeavyObject {
     private String value = null;
 
     public LazyProxy() {
-        //this.heavyObject = heavyObject;
+        // this.heavyObject = heavyObject;
     }
 
     @Override
