@@ -8,7 +8,7 @@ import java.util.List;
 public interface EntityClassMetaData<T> {
     String getName();
 
-    Constructor<T> getConstructor() throws NoSuchMethodException;
+    Constructor<T> getConstructor();
 
     Field getIdField();
 

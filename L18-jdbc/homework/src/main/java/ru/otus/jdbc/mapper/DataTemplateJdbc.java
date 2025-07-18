@@ -117,10 +117,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
             }
 
             return instance;
-        } catch (NoSuchMethodException
-                | InstantiationException
-                | IllegalAccessException
-                | InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
