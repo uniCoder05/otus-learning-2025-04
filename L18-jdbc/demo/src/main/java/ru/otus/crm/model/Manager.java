@@ -1,7 +1,11 @@
 package ru.otus.crm.model;
 
+import ru.otus.annotations.Id;
+
 public class Manager {
+    @Id
     private Long no;
+
     private String label;
     private String param1;
 

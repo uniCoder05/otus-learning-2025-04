@@ -10,8 +10,6 @@ public interface EntityClassMetaData<T> {
 
     Constructor<T> getConstructor();
 
-    // Поле Id должно определять по наличию аннотации Id
-    // Аннотацию @Id надо сделать самостоятельно
     Field getIdField();
 
     List<Field> getAllFields();
