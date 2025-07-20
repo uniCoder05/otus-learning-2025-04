@@ -29,6 +29,7 @@ include("L16-io:homework")
 include("L17-nio")
 include("L18-jdbc:demo")
 include("L18-jdbc:homework")
+include("L19-rdbms")
 
 pluginManagement {
     val jgitver: String by settings
