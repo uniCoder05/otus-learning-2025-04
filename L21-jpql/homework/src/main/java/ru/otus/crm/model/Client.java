@@ -34,11 +34,13 @@ public class Client implements Cloneable {
     public Client(String name) {
         this.id = null;
         this.name = name;
+        this.phones = new ArrayList<>();
     }
 
     public Client(Long id, String name) {
         this.id = id;
         this.name = name;
+        this.phones = new ArrayList<>();
     }
 
     @SuppressWarnings("this-escape")
@@ -46,11 +48,11 @@ public class Client implements Cloneable {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.phones = (phones != null) ? new ArrayList<>(phones) : new ArrayList<>();
         if (this.address != null) {
+            this.address = address.clone();
             this.address.setClient(this);
         }
-        this.phones.forEach(phone -> phone.setClient(this)); // обратная ссылка для каждого телефона
+        phonesInit(phones);
     }
 
     @Override
@@ -85,5 +87,16 @@ public class Client implements Cloneable {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, address, phones);
+    }
+
+    private void phonesInit(List<Phone> phones) {
+        this.phones = new ArrayList<>();
+        if (phones != null) {
+            for (Phone phone : phones) {
+                Phone clonedPhone = phone.clone();
+                clonedPhone.setClient(this); // Обратная ссылка для телефона
+                this.phones.add(clonedPhone);
+            }
+        }
     }
 }
