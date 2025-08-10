@@ -1,30 +1,70 @@
 package ru.otus.cachehw;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class MyCache<K, V> implements HwCache<K, V> {
-    // Надо реализовать эти методы
+    private static final Logger log = LoggerFactory.getLogger(MyCache.class);
+
+    private final Map<K, V> cache = new WeakHashMap<>();
+    private final List<HwListener<K, V>> listeners = new ArrayList<>();
 
     @Override
     public void put(K key, V value) {
-        throw new UnsupportedOperationException();
+        log.info("Putting key: {} into cache", key);
+        cache.put(key, value);
+        notifyListeners(key, value, "put");
     }
 
     @Override
     public void remove(K key) {
-        throw new UnsupportedOperationException();
+        log.info("Removing key: {} from cache", key);
+        V value = cache.remove(key);
+        notifyListeners(key, value, "remove");
     }
 
     @Override
     public V get(K key) {
-        throw new UnsupportedOperationException();
+        log.info("Getting key: {} from cache", key);
+        V value = cache.get(key);
+        notifyListeners(key, value, "get");
+        return value;
     }
 
     @Override
     public void addListener(HwListener<K, V> listener) {
-        throw new UnsupportedOperationException();
+        listeners.add(listener);
     }
 
     @Override
     public void removeListener(HwListener<K, V> listener) {
-        throw new UnsupportedOperationException();
+        listeners.remove(listener);
+    }
+
+    @Override
+    public void clear() {
+        log.info("Current cache size: {}", size());
+        log.info("--- Clearing cache ---");
+        cache.clear();
+        log.info("Current cache size: {}", size());
+    }
+
+    @Override
+    public int size() {
+        return cache.size();
+    }
+
+    private void notifyListeners(K key, V value, String action) {
+        for (HwListener<K, V> listener : listeners) {
+            try {
+                listener.notify(key, value, action);
+            } catch (RuntimeException e) {
+                log.error("Error in listener on action '{}', key '{}', value '{}'", action, key, value, e);
+            }
+        }
     }
 }
