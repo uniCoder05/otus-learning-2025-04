@@ -10,27 +10,30 @@ import org.slf4j.LoggerFactory;
 public class MyCache<K, V> implements HwCache<K, V> {
     private static final Logger log = LoggerFactory.getLogger(MyCache.class);
 
-    private final Map<K, V> cache = new WeakHashMap<>();
+    private final Map<MyKey<K>, V> cache = new WeakHashMap<>();
     private final List<HwListener<K, V>> listeners = new ArrayList<>();
 
     @Override
     public void put(K key, V value) {
         log.info("Putting key: {} into cache", key);
-        cache.put(key, value);
+        MyKey<K> myKey = new MyKey<>(key);
+        cache.put(myKey, value);
         notifyListeners(key, value, "put");
     }
 
     @Override
     public void remove(K key) {
         log.info("Removing key: {} from cache", key);
-        V value = cache.remove(key);
+        MyKey<K> myKey = new MyKey<>(key);
+        V value = cache.remove(myKey);
         notifyListeners(key, value, "remove");
     }
 
     @Override
     public V get(K key) {
         log.info("Getting key: {} from cache", key);
-        V value = cache.get(key);
+        MyKey<K> myKey = new MyKey<>(key);
+        V value = cache.get(myKey);
         notifyListeners(key, value, "get");
         return value;
     }
@@ -59,11 +62,12 @@ public class MyCache<K, V> implements HwCache<K, V> {
     }
 
     private void notifyListeners(K key, V value, String action) {
+        MyKey<K> myKey = new MyKey<>(key);
         for (HwListener<K, V> listener : listeners) {
             try {
                 listener.notify(key, value, action);
             } catch (RuntimeException e) {
-                log.error("Error in listener on action '{}', key '{}', value '{}'", action, key, value, e);
+                log.error("Error in listener on action '{}', key '{}', value '{}'", action, myKey, value, e);
             }
         }
     }

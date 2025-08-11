@@ -22,8 +22,8 @@ public class DbServiceCacheDemo {
         SessionFactory sessionFactory = MyUtilClass.getSessionFactory();
         DBServiceClient dbServiceClient = MyUtilClass.getDbServiceClient();
         // --- Инициализация  dbServiceClientCache ---
-        HwCache<MyKey, Client> cache = new MyCache<>();
-        HwListener<MyKey, Client> cacheListener = new CacheListener<>();
+        HwCache<Long, Client> cache = new MyCache<>();
+        HwListener<Long, Client> cacheListener = new CacheListener<>();
         cache.addListener(cacheListener);
         var dbServiceClientCache = new DbServiceClientCacheImpl(dbServiceClient, cache);
 

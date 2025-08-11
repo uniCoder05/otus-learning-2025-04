@@ -8,6 +8,7 @@ public class CacheListener<K, V> implements HwListener<K, V> {
 
     @Override
     public void notify(K key, V value, String action) {
-        log.info("Cache event - '{}', key = '{}', value = '{}'", action, key, value);
+        MyKey<K> myKey = new MyKey<>(key);
+        log.info("Cache event - '{}', key = '{}', value = '{}'", action, myKey, value);
     }
 }
