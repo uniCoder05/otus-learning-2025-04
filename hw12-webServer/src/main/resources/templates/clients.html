@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+        thead {
+           background-color: #D4FF45;
+        }
+        td.digits {
+            text-align: right;
+        }
+        .legend {
+            text-align: center;
+        }
+
+   </style>
+    <title>Клиенты</title>
+    <script>
+        function createClient(event) {
+            event.preventDefault();
+            const form = event.currentTarget;
+            const phonesArr = form.phones.value.split(',').map(phoneNumber => phoneNumber.trim());
+            const client = {
+                name: form.name.value,
+                address: form.address.value,
+                phones: phonesArr
+            };
+            console.log(client);
+            const clientStr = JSON.stringify(client);
+            fetch('api/clients', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: clientStr
+            });
+        }
+
+        function getAllClients() {
+            fetch('api/clients')
+                .then(response => response.json())
+                .then(refreshClientsTable);
+        }
+
+        function refreshClientsTable(data) {
+            console.log(data);
+            const tbl = document.getElementById('clientsTable');
+            let html = "";
+            data.forEach(client => {
+                let tds = "";
+                let values = Object.values(client);
+                for(val of values) {
+                    tds+="<td>" + val + "</td>";
+                }
+                html += "<tr>" + tds + "</tr>";
+            });
+            tbl.tBodies[0].innerHTML = html;
+        }
+    </script>
+</head>
+
+<body>
+<h3>Otus HW12 - WebServer</h3>
+<form id="newClientForm" onsubmit="createClient(event)">
+    <fieldset style="width: 470px">
+        <legend class="legend" style=""><b>Создать нового клиента</b></legend>
+            <input type="text" id="name" name="name" value="Client New" placeholder="Имя и фамилия" required>
+            <br>
+            <br>
+            <input type="text" id="address" name="address" value="Newestreet" placeholder="Улица" required>
+            <br>
+            <br>
+            <input type="text" id="phones" name="phones" value="89270115523,89608170315" placeholder="Телефоны (через запятую)" required>
+            <br>
+            <br>
+        <button type="submit">Создать</button>
+    </fieldset>
+</form>
+<br>
+<br>
+<button onclick="getAllClients()">Получить список всех клиентов</button>
+<br>
+<br>
+<table id="clientsTable" style="width: 500px; border: 1px solid black">
+    <thead>
+        <tr>
+            <th style="width: 50px">Id</th>
+            <th style="width: 150px">Имя</th>
+            <th style="width: 100px">Адрес</th>
+            <th style="width: 200px">Телефоны</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+</body>
+</html>
