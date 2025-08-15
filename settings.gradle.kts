@@ -46,6 +46,7 @@ include("L24-webServer")
 include("L25-di:class-demo")
 include("L25-di:homework-template")
 include("L26-springBootMvc")
+include("hw12-webServer")
 
 pluginManagement {
     val jgitver: String by settings
