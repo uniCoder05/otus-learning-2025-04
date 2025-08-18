@@ -19,11 +19,13 @@ import ru.otus.appcontainer.exceptions.TooManyAppComponentsException;
 @SuppressWarnings({"this-escape", "squid:S1068"})
 public class AppComponentsContainerImpl implements AppComponentsContainer {
     private static final Logger log = LoggerFactory.getLogger(AppComponentsContainerImpl.class);
-
-    private final Map<String, Object> appComponentsByName = new HashMap<>();
-    private final Map<Class<?>, List<Object>> appComponentsByType = new HashMap<>();
     private static final Class<AppComponentsContainerConfig> CONFIG_ANNOTATION_CLASS =
             AppComponentsContainerConfig.class;
+    private static final Class<AppComponent> COMPONENT_ANNOTATION_CLASS = AppComponent.class;
+
+    private final List<Object> appComponents = new ArrayList<>();
+    private final Map<String, Object> appComponentsByName = new HashMap<>();
+    private final Map<Class<?>, List<Object>> appComponentsByType = new HashMap<>();
 
     public AppComponentsContainerImpl(Class<?>... initialConfigClasses) {
         batchProcessConfig(initialConfigClasses);
@@ -46,56 +48,54 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     private void processConfig(Class<?> configClass) {
         checkConfigClass(configClass);
-        Class<AppComponent> appComponentClass = AppComponent.class;
 
-        Object configInstance;
+        Object configInstance = getConfigInstance(configClass);
+        List<Method> componentMethods = getComponentMethodsSortedByOrder(configClass);
+        componentMethods.forEach(m -> processComponentMethod(m, configInstance));
+    }
+
+    private Object getConfigInstance(Class<?> configClass) {
         try {
-            configInstance = configClass.getDeclaredConstructor().newInstance();
+            return configClass.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new AppComponentCreationException(
                     String.format("Ошибка создания экземпляра конфигурационного класса %s", configClass.getName()), e);
         }
-
-        Predicate<Method> isComponentMethod = (m) -> m.isAnnotationPresent(appComponentClass);
-        Comparator<Method> byOrderComparator =
-                Comparator.comparingInt(m -> m.getAnnotation(appComponentClass).order());
-
-        List<Method> componentMethods = Arrays.stream(configClass.getDeclaredMethods())
-                .filter(isComponentMethod)
-                .sorted(byOrderComparator)
-                .toList();
-
-        for (Method method : componentMethods) {
-            String componentName = method.getAnnotation(appComponentClass).name();
-            log.info("Метод: {} Имя компонента: {}", method.getName(), componentName);
-            if (appComponentsByName.containsKey(componentName)) {
-                throw new AppComponentCreationException(String.format("Дубликат имени компонента '%s'", componentName));
-            }
-
-            Object[] args = Arrays.stream(method.getParameterTypes())
-                    .map(this::getAppComponent)
-                    .toArray();
-
-            try {
-                Object component = method.invoke(configInstance, args);
-                appComponentsByName.put(componentName, component);
-                putComponentByType(component.getClass(), component);
-                putComponentByType(method.getReturnType(), component);
-
-            } catch (Exception e) {
-                throw new AppComponentCreationException(
-                        String.format(
-                                "Ошибка создания компонента: '%s' Вызываемый метод: '%s'.",
-                                componentName, method.getName()),
-                        e);
-            }
-        }
     }
 
-    private void putComponentByType(Class<?> componentType, Object component) {
-        appComponentsByType
-                .computeIfAbsent(componentType, val -> new ArrayList<>())
-                .add(component);
+    private List<Method> getComponentMethodsSortedByOrder(Class<?> configClass) {
+        Predicate<Method> isComponentMethod = (m) -> m.isAnnotationPresent(COMPONENT_ANNOTATION_CLASS);
+        Comparator<Method> byOrderComparator = Comparator.comparingInt(
+                m -> m.getAnnotation(COMPONENT_ANNOTATION_CLASS).order());
+
+        return Arrays.stream(configClass.getDeclaredMethods())
+                .sorted(byOrderComparator)
+                .filter(isComponentMethod)
+                .toList();
+    }
+
+    private void processComponentMethod(Method method, Object configInstance) {
+        String componentName = method.getAnnotation(COMPONENT_ANNOTATION_CLASS).name();
+        log.info("Метод: {} Имя компонента: {}", method.getName(), componentName);
+        if (appComponentsByName.containsKey(componentName)) {
+            throw new AppComponentCreationException(String.format("Дубликат имени компонента '%s'", componentName));
+        }
+
+        Object[] args = Arrays.stream(method.getParameterTypes())
+                .map(this::getAppComponent)
+                .toArray();
+
+        try {
+            Object component = method.invoke(configInstance, args);
+            appComponentsByName.put(componentName, component);
+            appComponents.add(component);
+        } catch (Exception e) {
+            throw new AppComponentCreationException(
+                    String.format(
+                            "Ошибка создания компонента: '%s' Вызываемый метод: '%s'.",
+                            componentName, method.getName()),
+                    e);
+        }
     }
 
     private void checkConfigClass(Class<?> configClass) {
@@ -108,11 +108,15 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     @SuppressWarnings("unchecked")
     @Override
     public <C> C getAppComponent(Class<C> componentClass) {
-        List<Object> foundComponents = appComponentsByType.get(componentClass);
-        if (foundComponents == null || foundComponents.isEmpty()) {
+        Predicate<Object> isAssignableComponent = (c) -> componentClass.isAssignableFrom(c.getClass());
+        List<Object> foundComponents =
+                appComponents.stream().filter(isAssignableComponent).toList();
+
+        if (foundComponents.isEmpty()) {
             throw new AppComponentNotFoundException(
                     String.format("Компонент с типом '%s' не найден", componentClass.getName()));
         }
+
         if (foundComponents.size() > 1) {
             throw new TooManyAppComponentsException(
                     String.format("Найдено более одного компонента с типом '%s'", componentClass.getName()));
