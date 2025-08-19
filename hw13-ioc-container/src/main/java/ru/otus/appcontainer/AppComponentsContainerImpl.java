@@ -25,7 +25,6 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     private final List<Object> appComponents = new ArrayList<>();
     private final Map<String, Object> appComponentsByName = new HashMap<>();
-    private final Map<Class<?>, List<Object>> appComponentsByType = new HashMap<>();
 
     public AppComponentsContainerImpl(Class<?>... initialConfigClasses) {
         batchProcessConfig(initialConfigClasses);
