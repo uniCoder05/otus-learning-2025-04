@@ -48,6 +48,8 @@ include("L25-di:homework-template")
 include("L26-springBootMvc")
 include("hw12-webServer")
 
+include("hw13-ioc-container")
+
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings
