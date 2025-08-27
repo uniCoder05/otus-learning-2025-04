@@ -50,6 +50,13 @@ include("hw12-webServer")
 
 include("hw13-ioc-container")
 
+include ("L27-websocket:websocket")
+include ("L27-websocket:messager")
+include ("L27-websocket:messager-starter")
+include ("L27-websocket:application")
+
+include ("L28-springDataJdbc")
+
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings
