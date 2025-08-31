@@ -1,0 +1,41 @@
+.legend {
+    text-align: center;
+}
+.new-client-field {
+    width: 480px;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+.clients-table-caption {
+  margin-bottom: 10px;
+}
+.clients-table-head {
+   background-color: #D4FF45;
+}
+.clients-table {
+    width: 500px;
+    table-layout: fixed;
+}
+td:nth-child(1),
+td:nth-child(4) {
+    text-align: right;
+}
+th:nth-child(1) {
+    width: 50px;
+}
+th:nth-child(2) {
+    width: 150px;
+}
+th:nth-child(3) {
+    width: 100px;
+}
+th:nth-child(4) {
+    width: 200px;
+}
+.clients-table td {
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
