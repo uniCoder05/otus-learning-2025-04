@@ -26,7 +26,7 @@
 <br>
 <br>
 <table id="clientsTable" class="clients-table">
-    <caption class="clients-table-caption"><b>Список всех клиентов</b></caption>
+    <caption class="clients-table-caption"><b>Список клиентов</b></caption>
     <thead class="clients-table-head">
         <tr>
             <th>Id</th>
@@ -36,12 +36,6 @@
         </tr>
     </thead>
     <tbody>
-        <tr th:each="client : ${clients}">
-            <td><span th:text="${client.id}"></span></td>
-            <td><span th:text="${client.name}"></span></td>
-            <td><span th:text="${client.address}"></span></td>
-            <td><span th:text="${#strings.listJoin(client.phones, ',')}"></span></td>
-        </tr>
     </tbody>
 </table>
 </body>

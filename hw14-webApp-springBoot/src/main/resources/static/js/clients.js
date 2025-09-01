@@ -1,3 +1,5 @@
+window.onload = getAllClients();
+
 function createClient(event) {
             event.preventDefault();
             const form = event.currentTarget;
@@ -15,7 +17,7 @@ function createClient(event) {
                     'Content-Type': 'application/json'
                 },
                 body: clientStr
-            }).then(() => getAllClients());
+            }).then(getAllClients);
 }
 
 function getAllClients() {
@@ -32,7 +34,7 @@ function refreshClientsTable(data) {
         let tds = "";
         let values = Object.values(client);
         for(val of values) {
-            tds+="<td><span>" + val + "</span></td>";
+            tds+="<td>" + val + "</td>";
         }
         html += "<tr>" + tds + "</tr>";
     });
