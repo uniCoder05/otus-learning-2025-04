@@ -59,6 +59,9 @@ include ("L28-springDataJdbc")
 
 include("hw14-webApp-springBoot")
 
+include("L29-threads")
+
+
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings
