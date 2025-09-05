@@ -60,6 +60,8 @@ include ("L28-springDataJdbc")
 include("hw14-webApp-springBoot")
 
 include("L29-threads")
+include ("L30-JMM")
+include ("L31-executors")
 
 
 pluginManagement {
