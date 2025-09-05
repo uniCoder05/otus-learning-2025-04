@@ -63,6 +63,8 @@ include("L29-threads")
 include ("L30-JMM")
 include ("L31-executors")
 
+include("hw15-numbers-sequence")
+
 
 pluginManagement {
     val jgitver: String by settings
