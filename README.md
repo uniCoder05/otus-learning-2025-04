@@ -6,7 +6,7 @@
 **Курс:** Java Professional
 
 ---
-
+[![OTUS-white-small.png](https://i.postimg.cc/ydfshQTB/OTUS-white-small.png)](https://postimg.cc/gX6CmK5B)
 ## Преподаватели:
 - Сергей Петрелевич
 - Стрекалов Павел
