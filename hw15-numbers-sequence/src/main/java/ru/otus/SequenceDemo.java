@@ -29,7 +29,7 @@ public class SequenceDemo {
                 if (id == STARTER_ID) {
                     changeCounter();
                 }
-                log.info("{}: {}", Thread.currentThread().getName(), getCounter());
+                log.info("{}: {}", Thread.currentThread().getName(), counter);
                 waitingId = id;
                 sleep();
                 notifyAll();
@@ -48,10 +48,6 @@ public class SequenceDemo {
             counter--;
             ascending = counter == MIN;
         }
-    }
-
-    private int getCounter() {
-        return counter;
     }
 
     private static void sleep() {
