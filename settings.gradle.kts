@@ -71,6 +71,8 @@ include ("L32-concurrentCollections:QueueDemo")
 include ("L33-virtualThreads:base")
 include ("L33-virtualThreads:springBoot")
 
+include("hw16-concurrent-queues")
+
 
 pluginManagement {
     val jgitver: String by settings
