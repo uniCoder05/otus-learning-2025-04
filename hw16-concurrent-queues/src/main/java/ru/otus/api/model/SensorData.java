@@ -1,8 +1,10 @@
 package ru.otus.api.model;
 
 import java.time.LocalDateTime;
+import lombok.Getter;
 
-public class SensorData {
+@Getter
+public class SensorData implements Comparable<SensorData> {
     private final LocalDateTime measurementTime;
     private final String room;
     private final Double value;
@@ -13,23 +15,16 @@ public class SensorData {
         this.value = value;
     }
 
-    public LocalDateTime getMeasurementTime() {
-        return measurementTime;
-    }
-
-    public String getRoom() {
-        return room;
-    }
-
-    public Double getValue() {
-        return value;
-    }
-
     @Override
     public String toString() {
         return "SensorData{" + "measurementTime="
                 + measurementTime + ", room='"
                 + room + '\'' + ", value="
                 + value + '}';
+    }
+    //Для требуемой сортировки в PriorityBlockingQueue
+    @Override
+    public int compareTo(SensorData other) {
+        return this.measurementTime.compareTo(other.getMeasurementTime());
     }
 }
