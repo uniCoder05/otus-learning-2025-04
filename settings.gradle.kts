@@ -73,6 +73,10 @@ include ("L33-virtualThreads:springBoot")
 
 include("hw16-concurrent-queues")
 
+include ("L34-multiprocess:processes-demo")
+include ("L34-multiprocess:sockets-demo")
+include ("L34-multiprocess:rmi-demo")
+include ("L34-multiprocess:grpc-demo")
 
 pluginManagement {
     val jgitver: String by settings
