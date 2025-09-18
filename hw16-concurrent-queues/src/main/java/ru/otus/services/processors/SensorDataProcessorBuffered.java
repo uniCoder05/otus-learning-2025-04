@@ -36,18 +36,17 @@ public class SensorDataProcessorBuffered implements SensorDataProcessor {
     }
 
     public void flush() {
-        synchronized (flushLock) {
-            if (dataBuffer.isEmpty()) {
-                return;
-            }
-            List<SensorData> bufferedData = new ArrayList<>();
-            dataBuffer.drainTo(bufferedData);
-            try {
-                writer.writeBufferedData(bufferedData);
-            } catch (Exception e) {
-                log.error("Ошибка в процессе записи буфера", e);
-                dataBuffer.addAll(bufferedData);
-            }
+        List<SensorData> bufferedData = new ArrayList<>();
+        dataBuffer.drainTo(bufferedData);
+
+        if (bufferedData.isEmpty()) {
+            return;
+        }
+        try {
+            writer.writeBufferedData(bufferedData);
+        } catch (Exception e) {
+            log.error("Ошибка в процессе записи буфера", e);
+            dataBuffer.addAll(bufferedData);
         }
     }
 
