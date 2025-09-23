@@ -80,6 +80,13 @@ include("L34-multiprocess:grpc-demo")
 
 include("hw17-grpc")
 
+include ("L35-rabbitMQ:allServicesModels")
+include ("L35-rabbitMQ:approvalService")
+include ("L35-rabbitMQ:mainService")
+
+include ("L36-NIO")
+include ("L37-netty")
+
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings
