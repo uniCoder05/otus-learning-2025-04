@@ -50,33 +50,35 @@ include("hw12-webServer")
 
 include("hw13-ioc-container")
 
-include ("L27-websocket:websocket")
-include ("L27-websocket:messager")
-include ("L27-websocket:messager-starter")
-include ("L27-websocket:application")
+include("L27-websocket:websocket")
+include("L27-websocket:messager")
+include("L27-websocket:messager-starter")
+include("L27-websocket:application")
 
-include ("L28-springDataJdbc")
+include("L28-springDataJdbc")
 
 include("hw14-webApp-springBoot")
 
 include("L29-threads")
-include ("L30-JMM")
-include ("L31-executors")
+include("L30-JMM")
+include("L31-executors")
 
 include("hw15-numbers-sequence")
 
-include ("L32-concurrentCollections:ConcurrentCollections")
-include ("L32-concurrentCollections:QueueDemo")
+include("L32-concurrentCollections:ConcurrentCollections")
+include("L32-concurrentCollections:QueueDemo")
 
-include ("L33-virtualThreads:base")
-include ("L33-virtualThreads:springBoot")
+include("L33-virtualThreads:base")
+include("L33-virtualThreads:springBoot")
 
 include("hw16-concurrent-queues")
 
-include ("L34-multiprocess:processes-demo")
-include ("L34-multiprocess:sockets-demo")
-include ("L34-multiprocess:rmi-demo")
-include ("L34-multiprocess:grpc-demo")
+include("L34-multiprocess:processes-demo")
+include("L34-multiprocess:sockets-demo")
+include("L34-multiprocess:rmi-demo")
+include("L34-multiprocess:grpc-demo")
+
+include("hw17-grpc")
 
 pluginManagement {
     val jgitver: String by settings
