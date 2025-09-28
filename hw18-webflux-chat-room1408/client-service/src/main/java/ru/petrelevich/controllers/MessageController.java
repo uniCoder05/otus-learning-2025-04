@@ -10,12 +10,14 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import org.springframework.web.util.HtmlUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.petrelevich.domain.Message;
+import ru.petrelevich.domain.Room;
 
 @Controller
 public class MessageController {
@@ -33,11 +35,15 @@ public class MessageController {
 
     @MessageMapping("/message.{roomId}")
     public void getMessage(@DestinationVariable("roomId") String roomId, Message message) {
+        if (Room.ROOM_1408.equals(roomId)) {
+            logger.error("You can't save messages in room {}", roomId);
+            return;
+        }
         logger.info("get message:{}, roomId:{}", message, roomId);
         saveMessage(roomId, message).subscribe(msgId -> logger.info("message send id:{}", msgId));
 
-        template.convertAndSend(
-                String.format("%s%s", TOPIC_TEMPLATE, roomId), new Message(HtmlUtils.htmlEscape(message.messageStr())));
+        convertAndSend(roomId, message);
+        convertAndSend(Room.ROOM_1408, message);
     }
 
     @EventListener
@@ -59,8 +65,9 @@ public class MessageController {
         }
         logger.info("subscription for:{}, roomId:{}, user:{}", simpDestination, roomId, principal.getName());
         // /user/f6532733-51db-4d0e-bd00-1267dddc7b21/topic/response.1
-        getMessagesByRoomId(roomId)
-                .doOnError(ex -> logger.error("getting messages for roomId:{} failed", roomId, ex))
+        var messages = Long.parseLong(Room.ROOM_1408) == roomId ? getAllMessages() : getMessagesByRoomId(roomId);
+
+        messages.doOnError(ex -> logger.error("getting messages for roomId:{} failed", roomId, ex))
                 .subscribe(message -> template.convertAndSendToUser(principal.getName(), simpDestination, message));
     }
 
@@ -88,12 +95,27 @@ public class MessageController {
                 .get()
                 .uri(String.format("/msg/%s", roomId))
                 .accept(MediaType.APPLICATION_NDJSON)
-                .exchangeToFlux(response -> {
-                    if (response.statusCode().equals(HttpStatus.OK)) {
-                        return response.bodyToFlux(Message.class);
-                    } else {
-                        return response.createException().flatMapMany(Mono::error);
-                    }
-                });
+                .exchangeToFlux(this::responseMsg);
+    }
+
+    private Flux<Message> getAllMessages() {
+        return datastoreClient
+                .get()
+                .uri("/msg")
+                .accept(MediaType.APPLICATION_NDJSON)
+                .exchangeToFlux(this::responseMsg);
+    }
+
+    private Flux<Message> responseMsg(ClientResponse response) {
+        if (response.statusCode().equals(HttpStatus.OK)) {
+            return response.bodyToFlux(Message.class);
+        } else {
+            return response.createException().flatMapMany(Mono::error);
+        }
+    }
+
+    private void convertAndSend(String roomId, Message message) {
+        template.convertAndSend(
+                String.format("%s%s", TOPIC_TEMPLATE, roomId), new Message(HtmlUtils.htmlEscape(message.messageStr())));
     }
 }
