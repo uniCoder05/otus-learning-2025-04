@@ -99,6 +99,8 @@ include ("L39-kafka:producer")
 include ("hw18-webflux-chat-room1408:client-service")
 include ("hw18-webflux-chat-room1408:datastore-service")
 
+include ("L41-kuber")
+
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings
