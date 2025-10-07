@@ -13,7 +13,7 @@ public interface MessageRepository extends ReactiveCrudRepository<Message, Long>
     Flux<Message> findByRoomId(@Param("roomId") String roomId);
 
     @Override
-    @Query("select * from message")
+    @Query("select * from message order by id")
     @NonNull
     Flux<Message> findAll();
 }
